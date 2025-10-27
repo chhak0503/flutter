@@ -45,7 +45,24 @@ class _FormPageState extends State<FormPage> {
   String _gender = 'M';
   bool _isSwitched = false;
   String _submitResult = '';
-  
+
+  // 폼 취소 함수
+  void _cancelForm(){
+    _formKey.currentState!.reset();
+
+    _idController.clear();
+    _pwController.clear();
+    _nameController.clear();
+
+    _isCheck = false;
+    _isSwitched = false;
+
+    _submitResult = '';
+
+    // 화면 재빌드
+    setState(() {});
+  }
+
   // 폼 제출 함수
   void _submitForm(){
 
@@ -84,6 +101,7 @@ class _FormPageState extends State<FormPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextFormField(
+              controller: _idController,
               decoration: const InputDecoration(
                 labelText: '아이디',
                 border: OutlineInputBorder()
@@ -99,6 +117,7 @@ class _FormPageState extends State<FormPage> {
             ),
             const SizedBox(height: 10,),
             TextFormField(
+              controller: _pwController,
               obscureText: true, // 입력 텍스트 마스킹 처리
               decoration: const InputDecoration(
                   labelText: '비밀번호',
@@ -115,6 +134,7 @@ class _FormPageState extends State<FormPage> {
             ),
             const SizedBox(height: 10,),
             TextFormField(
+              controller: _nameController,
               decoration: const InputDecoration(
                   labelText: '이름',
                   border: OutlineInputBorder()
@@ -136,17 +156,23 @@ class _FormPageState extends State<FormPage> {
               validator: (value){
                 if (value == null || value.isEmpty)
                   return '이메일을 입력하세요.';
-                if (value.contains('@'))
+                if (!value.contains('@'))
                   return '유효한 이메일이 아닙니다.';
                 return null;
+              },
+              onSaved: (value){
+                _email = value!;
               },
             ),
 
             const SizedBox(height: 10,),
             CheckboxListTile(
               title: const Text('회원 가입에 동의 합니다.'),
-              value: true,
+              value: _isCheck,
               onChanged: (value){
+                setState(() {
+                  _isCheck = value ?? false;
+                });
 
               },
               controlAffinity: ListTileControlAffinity.leading,
@@ -157,9 +183,12 @@ class _FormPageState extends State<FormPage> {
             const Text('성별 선택', style: TextStyle(fontSize: 16),),
             RadioGroup<String>(
               onChanged: (value){
+                setState(() {
+                  _gender = value ?? '';
+                });
 
               },
-              groupValue: 'M',
+              groupValue: _gender,
               child: Row(
                 children: [
                   Expanded(
@@ -185,8 +214,11 @@ class _FormPageState extends State<FormPage> {
                 const Text('푸시 알림 허용'),
                 const Spacer(),
                 Switch(
-                  value: true,
+                  value: _isSwitched,
                   onChanged: (value){
+                    setState(() {
+                      _isSwitched = value;
+                    });
 
                   }
                 )
@@ -199,16 +231,18 @@ class _FormPageState extends State<FormPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
-                  onPressed: null,
+                  onPressed: _cancelForm,
                   child: const Text('취소')
                 ),
                 const SizedBox(width: 10,),
                 ElevatedButton(
-                  onPressed: null,
+                  onPressed: _submitForm,
                   child: const Text('제출')
                 ),
               ],
             ),
+            const SizedBox(height: 10,),
+            Text(_submitResult)
           ],
         )
       ),
