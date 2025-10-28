@@ -60,7 +60,7 @@ class _ParentWidgetState extends State<ParentWidget> {
   @override
   Widget build(BuildContext context) {
 
-    // provider 접근하기
+    // provider 접근하기(Provider 구독)
     final counterProvider = context.watch<CounterProvider>();
 
     return Column(
@@ -82,8 +82,85 @@ class _ParentWidgetState extends State<ParentWidget> {
             }, child: const Text('감소')),
           ],
         ),
+
+        const Divider(),
+        Child1Widget(),
+        const Divider(),
+        Child2Widget(),
+
+
       ],
     );
   }
 }
+
+class Child1Widget extends StatelessWidget {
+  const Child1Widget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+
+    // Provider 구독
+    final counterProvider = Provider.of<CounterProvider>(context);
+
+    return Column(
+      children: [
+        Text(
+          'Child1 Provider count : ${counterProvider._count}',
+          style: Theme.of(context).textTheme.headlineMedium,
+        ),
+
+        const SizedBox(height: 10,),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(onPressed: (){
+              counterProvider.increment();
+            }, child: const Text('증가')),
+            ElevatedButton(onPressed: (){
+
+              context.read<CounterProvider>().decrement();
+            }, child: const Text('감소')),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class Child2Widget extends StatelessWidget {
+  const Child2Widget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<CounterProvider>(
+        builder: (context, notifier, child){
+          return Column(
+            children: [
+              Text(
+                'Child2 Provider count : ${notifier._count}',
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
+
+              const SizedBox(height: 10,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(onPressed: (){
+                    notifier.increment();
+                  }, child: const Text('증가')),
+                  ElevatedButton(onPressed: (){
+                    notifier.decrement();
+                  }, child: const Text('감소')),
+                ],
+              ),
+
+
+            ],
+          );
+        }
+    );
+  }
+}
+
 
