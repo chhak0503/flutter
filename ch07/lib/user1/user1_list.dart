@@ -1,4 +1,5 @@
 
+import 'package:ch07/user1/user1_register.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -8,13 +9,24 @@ class User1List extends StatefulWidget {
 }
 
 class _User1ListState extends State<User1List> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('User1 목록'),),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          // 등록 이동
+          Navigator.push(context, MaterialPageRoute(
+              builder: (context) => User1Register()
+          ));
+        },
+        child: const Icon(Icons.add),
+      ),
       body: FutureBuilder(
         future: null,
         builder: (context, snapshot) {
+
           if(snapshot.connectionState == ConnectionState.waiting){
             return const CircularProgressIndicator();
           }else if(snapshot.hasError) {
