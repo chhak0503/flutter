@@ -28,4 +28,9 @@ class User1 {
       "age": age,
     };
   }
+
+  @override
+  String toString() {
+    return 'User1{userid: $userid, name: $name, birth: $birth, age: $age}';
+  }
 }
