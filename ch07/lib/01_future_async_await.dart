@@ -90,6 +90,7 @@ class _FutureScreenState extends State<FutureScreen> {
   }
 
   void handleCount() async {
+
     int result = await startCounting();
 
     setState(() {
