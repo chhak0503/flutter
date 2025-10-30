@@ -27,7 +27,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   bool _isLoading = false;
 
-
   Future<void> _submitForm() async {
 
     if(!_formKey.currentState!.validate()){
@@ -41,6 +40,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       email: _emailController.text,
       role: 'USER',
     );
+
     log('member : $member');
 
     // 서비스 호출
@@ -51,21 +51,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
         SnackBar(content: Text('회원가입 완료 : $savedUser')),
       );
 
+      // 가입 완료 후 로그인 화면으로 이동
+      Navigator.of(context).pop();
+
     }catch(err){
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('에러 발생 : $err')),
       );
     }
-
-
-
-
-
   }
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -131,11 +125,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 const SizedBox(height: 10,),
                 _buildInputField(
-                    controller: _emailController,
-                    title: '이메일 입력(선택)',
-                    validator: (value){
-                      return null;
-                    }
+                  controller: _emailController,
+                  title: '이메일 입력(선택)',
+                  validator: (value){
+                    return null;
+                  }
                 ),
                 const SizedBox(height: 10,),
                 SizedBox(
