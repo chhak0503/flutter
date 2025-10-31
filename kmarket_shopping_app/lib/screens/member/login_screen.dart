@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kmarket_shopping/screens/member/terms_screen.dart';
 import 'package:kmarket_shopping/services/member_service.dart';
+import 'package:kmarket_shopping/services/token_storage_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -18,6 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _pwController = TextEditingController();
 
   final service = MemberService();
+  final tokenStorageService = TokenStorageService();
 
   void _procLogin() async {
 
@@ -38,24 +40,20 @@ class _LoginScreenState extends State<LoginScreen> {
       log('accessToken : $accessToken');
 
       if(accessToken != null){
-        // 토큰 저장(SharedPreference or SecurePreference)
+        // 토큰 저장(SharedPreference or SecureStrage)
+        tokenStorageService.saveToken(accessToken);
 
+        // 로그인 화면 닫기
+        Navigator.of(context).pop();
       }
 
     }catch(err){
       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('에러발생 : $err'))
+          SnackBar(content: Text(err.toString()))
       );
     }
-
-
-
-
-
-
-
-
   }
+
 
 
   @override
