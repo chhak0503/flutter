@@ -3,12 +3,18 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kmarket_shopping/providers/auth_provider.dart';
+import 'package:kmarket_shopping/screens/main/my_tab.dart';
 import 'package:kmarket_shopping/screens/member/login_screen.dart';
 import 'package:kmarket_shopping/services/token_storage_service.dart';
 import 'package:provider/provider.dart';
 
 class HomeTab extends StatefulWidget {
-  const HomeTab({super.key});
+
+  final Function(int) onTabSwitch;
+
+  const HomeTab({super.key, required this.onTabSwitch});
+
+
   @override
   State<StatefulWidget> createState() => _HomeTabState();
 }
@@ -54,10 +60,21 @@ class _HomeTabState extends State<HomeTab> {
         Image.asset('images/logo.png', width: 140,),
         IconButton(
           onPressed: () async {
-            await Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => LoginScreen())
-            );
-            setState(() {});
+            if(isLoggedIn){
+              /*
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => MyTab()),
+              );
+              */
+              // 마이페이지 탭 전환
+              widget.onTabSwitch(3);
+
+            }else{
+              await Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => LoginScreen())
+              );
+              setState(() {});
+            }
           },
           icon: Icon(
             isLoggedIn ? Icons.person : Icons.login,
