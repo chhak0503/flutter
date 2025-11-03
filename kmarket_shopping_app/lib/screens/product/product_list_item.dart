@@ -28,10 +28,10 @@ class ProductListItem extends StatelessWidget {
           padding: EdgeInsets.all(6.0),
           child: Row(
             children: [
-              SizedBox(
+              Image.network(
                 width: 100,
                 height: 100,
-                child: Image.network('${AppConfig.baseUrl}/product/image/${product.thumb120}'),
+                '${AppConfig.baseUrl}/product/image/${product.thumb120}'
               ),
               SizedBox(width: 10,),
               Expanded(
