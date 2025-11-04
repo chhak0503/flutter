@@ -1,9 +1,13 @@
 
 
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kmarket_shopping/config/app_config.dart';
+import 'package:kmarket_shopping/models/cart.dart';
 import 'package:kmarket_shopping/models/product.dart';
+import 'package:kmarket_shopping/services/cart_service.dart';
 
 class ProductViewScreen extends StatefulWidget {
 
@@ -19,6 +23,20 @@ class _ProductViewScreen extends State<ProductViewScreen> {
 
   // 수량 상태
   int _quantity = 1;
+
+  final cartService = CartService();
+
+  // 장바구니 추가 함수
+  Future<void> _addCart() async {
+
+    int pno = widget.product.pno;
+
+    Map<String, dynamic> jsonData = await cartService.addCart(pno, _quantity);
+    Cart savedCart = Cart.fromJson(jsonData);
+
+    log('savedCart : $savedCart');
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -37,12 +55,11 @@ class _ProductViewScreen extends State<ProductViewScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              height: 300,
-              width: double.infinity,
+            ClipRect(
               child: Image.network(
+                width: double.infinity,
                 '${AppConfig.baseUrl}/product/image/${product.thumb240}',
-                fit: BoxFit.cover,
+                fit: BoxFit.fitWidth, // 가로폭 전체 채우고 이미지 비율 유지
               )
             ),
             const SizedBox(height: 10,),
@@ -105,7 +122,7 @@ class _ProductViewScreen extends State<ProductViewScreen> {
               children: [
                 Expanded(
                   child: ElevatedButton.icon(
-                    onPressed: (){},
+                    onPressed: _addCart,
                     label: const Text('장바구니'),
                     icon: Icon(Icons.shopping_cart)
                   )
