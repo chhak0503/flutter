@@ -1,5 +1,7 @@
 
 
+import 'dart:developer';
+
 import 'package:kmarket_shopping/models/product.dart';
 
 class Cart {

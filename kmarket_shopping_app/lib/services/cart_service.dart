@@ -36,9 +36,7 @@ class CartService {
       );
 
       if(response.statusCode == 200){
-
         log('response.body : ${response.body}');
-
         return jsonDecode(response.body);
       }else {
         log('err...1');
@@ -48,6 +46,8 @@ class CartService {
       log('err...2');
       throw Exception(err);
     }
+
+
   }
 
 
